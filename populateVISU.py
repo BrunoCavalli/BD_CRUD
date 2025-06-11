@@ -31,7 +31,7 @@ with conn.cursor() as cur:
 def gerar_visualizacoes(qtd):
     visualizacoes = []
     for i in range(501, 501 + qtd):
-        id_visualizacao = f'{i:04}'
+        id_visualizacao = f'{i:03}'
         id_perfil = random.choice(ids_perfis)
         dias_atras = random.randint(0, 365)
         visu_data = (datetime.today() - timedelta(days=dias_atras)).strftime('%Y-%m-%d')
@@ -40,7 +40,7 @@ def gerar_visualizacoes(qtd):
     return visualizacoes
 
 # Gerar os dados
-visualizacoes = gerar_visualizacoes(1500)
+visualizacoes = gerar_visualizacoes(499)
 
 # Inserir no banco
 with conn.cursor() as cur:
