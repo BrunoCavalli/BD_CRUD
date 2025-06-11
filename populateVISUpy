@@ -28,7 +28,7 @@ with conn.cursor() as cur:
     ids_perfis = [row[0] for row in cur.fetchall()]
 
 # Função para gerar visualizações
-def gerar_visualizacoes(qtd=1000):
+def gerar_visualizacoes(qtd):
     visualizacoes = []
     for i in range(20, qtd + 1):
         id_visualizacao = f'{i:03}'  # '001', '002', ..., até '999'
@@ -40,7 +40,7 @@ def gerar_visualizacoes(qtd=1000):
     return visualizacoes
 
 # Gerar os dados
-visualizacoes = gerar_visualizacoes(500)  # Altere o número se quiser mais/menos
+visualizacoes = gerar_visualizacoes(2000)  # Altere o número se quiser mais/menos
 
 # Inserir no banco
 with conn.cursor() as cur:
