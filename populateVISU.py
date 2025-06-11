@@ -30,7 +30,7 @@ with conn.cursor() as cur:
 # Função para gerar visualizações
 def gerar_visualizacoes(qtd):
     visualizacoes = []
-    for i in range(20, qtd + 1):
+    for i in range(501, 501 + qtd):
         id_visualizacao = f'{i:03}'  # '001', '002', ..., até '999'
         id_perfil = random.choice(ids_perfis)
         dias_atras = random.randint(0, 365)
@@ -40,7 +40,7 @@ def gerar_visualizacoes(qtd):
     return visualizacoes
 
 # Gerar os dados
-visualizacoes = gerar_visualizacoes(2000)  # Altere o número se quiser mais/menos
+visualizacoes = gerar_visualizacoes(1500)  # Altere o número se quiser mais/menos
 
 # Inserir no banco
 with conn.cursor() as cur:
