@@ -99,8 +99,8 @@ def listar_planos():
         if planos:
             print("\n--- Lista de Planos ---")
             for p in planos:
-                preco = float(p[2]) if isinstance(p[2], str) else p[2]
-                print(f"ID: {p[0]} | Nome: {p[1]} | Preço: R${preco:.2f} | Telas Simultâneas: {p[3]} | Resolução Máxima: {p[4]}")
+                preco = str(p[2]) 
+                print(f"ID: {p[0]} | Nome: {p[1]} | Preço: R${preco:} | Telas Simultâneas: {p[3]} | Resolução Máxima: {p[4]}")
         else:
             print("\nNenhum plano encontrado.")
     except Exception as e:
