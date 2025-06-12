@@ -112,7 +112,7 @@ def listar_planos():
         if planos:
             print("\n--- Lista de Planos ---")
             for p in planos:
-                print(f"ID: {p[0]} | Nome: {p[1]} | Preço: R${p[2]:.2f} | Telas Simultâneas: {p[3]} | Resolução Máxima: {p[4]}")
+                print(f"ID: {p[0]} | Nome: {p[1]} | Preço: R${p[2]} | Telas Simultâneas: {p[3]} | Resolução Máxima: {p[4]}")
         else:
             print("\nNenhum plano encontrado.")
     except Exception as e:
