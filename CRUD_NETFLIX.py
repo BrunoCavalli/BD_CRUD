@@ -360,46 +360,47 @@ def deletar_usuario():
     conn.autocommit = False
 
     try:
-        cur.execute("SELECT IDPerfil FROM Perfil WHERE IDUsuario = %s", (id_usuario,))
-        ids_perfis = [row[0] for row in cur.fetchall()]
+        cur.execute("SELECT 1 FROM Usuario WHERE IDUsuario = %s", (id_usuario,))
+        usuario_existe = cur.fetchone()
 
-        if not ids_perfis:
-            print(f"Usuário com ID {id_usuario} não encontrado ou não possui perfis.")
+        if not usuario_existe:
+            print(f"Usuário com ID {id_usuario} não encontrado.")
             conn.autocommit = True
             return
 
-        cur.execute("""
-            SELECT IDVisualizacao FROM Visualizacao WHERE IDPerfil = ANY(%s)
-        """, (ids_perfis,))
-        ids_visualizacoes = [row[0] for row in cur.fetchall()]
+        cur.execute("SELECT IDPerfil FROM Perfil WHERE IDUsuario = %s", (id_usuario,))
+        ids_perfis = [row[0] for row in cur.fetchall()]
 
-        if ids_visualizacoes:
-            cur.execute("DELETE FROM VisEpisodio WHERE IDVisualizacao = ANY(%s)", (ids_visualizacoes,))
-            print(f"  - {cur.rowcount} registros em VisEpisodio deletados.")
+        if ids_perfis:
+            cur.execute("""
+                SELECT IDVisualizacao FROM Visualizacao WHERE IDPerfil = ANY(%s)
+            """, (ids_perfis,))
+            ids_visualizacoes = [row[0] for row in cur.fetchall()]
 
-            cur.execute("DELETE FROM VisFilme WHERE IDVisualizacao = ANY(%s)", (ids_visualizacoes,))
-            print(f"  - {cur.rowcount} registros em VisFilme deletados.")
+            if ids_visualizacoes:
+                cur.execute("DELETE FROM VisEpisodio WHERE IDVisualizacao = ANY(%s)", (ids_visualizacoes,))
+                print(f"  - {cur.rowcount} registros em VisEpisodio deletados.")
 
-        cur.execute("DELETE FROM Visualizacao WHERE IDPerfil = ANY(%s)", (ids_perfis,))
-        print(f"  - {cur.rowcount} registros em Visualizacao deletados.")
+                cur.execute("DELETE FROM VisFilme WHERE IDVisualizacao = ANY(%s)", (ids_visualizacoes,))
+                print(f"  - {cur.rowcount} registros em VisFilme deletados.")
 
-        cur.execute("DELETE FROM Perfil WHERE IDUsuario = %s", (id_usuario,))
-        print(f"  - {cur.rowcount} registros em Perfil deletados.")
+            cur.execute("DELETE FROM Visualizacao WHERE IDPerfil = ANY(%s)", (ids_perfis,))
+            print(f"  - {cur.rowcount} registros em Visualizacao deletados.")
+
+            cur.execute("DELETE FROM Perfil WHERE IDUsuario = %s", (id_usuario,))
+            print(f"  - {cur.rowcount} registros em Perfil deletados.")
+        else:
+            print(f"Usuário com ID {id_usuario} não possui perfis associados.")
 
         cur.execute("DELETE FROM Usuario WHERE IDUsuario = %s", (id_usuario,))
-        if cur.rowcount == 0:
-            print("Usuário não encontrado (após tentar deletar dependências).")
-            conn.rollback()
-        else:
-            print(f"Usuário {id_usuario} deletado com sucesso.")
-            conn.commit()
+        print(f"Usuário {id_usuario} deletado com sucesso.")
+        conn.commit()
 
     except Exception as e:
         conn.rollback()
         print(f"Erro ao deletar usuário e suas dependências: {e}")
     finally:
         conn.autocommit = True
-
 # Início do programa
 if __name__ == "__main__":
     menu()
