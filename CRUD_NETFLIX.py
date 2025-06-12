@@ -92,19 +92,19 @@ def listar_temporadas(id_titulo_serie):
     except Exception as e:
         print(f"Erro ao listar temporadas: {e}")
 
-def listar_usuarios():
+def listar_planos():
     try:
-        cur.execute("SELECT IDUsuario, UserName, Email FROM Usuario ORDER BY IDUsuario")
-        usuarios = cur.fetchall()
-        if usuarios:
-            print("\n--- Lista de Usuários ---")
-            for u in usuarios:
-                print(f"ID: {u[0]} | Nome: {u[1]} | Email: {u[2]}")
+        cur.execute("SELECT idplano, planame, plapreco, telasimult, resolucaomax FROM plano ORDER BY idplano")
+        planos = cur.fetchall()
+        if planos:
+            print("\n--- Lista de Planos ---")
+            for p in planos:
+                preco = float(p[2]) if isinstance(p[2], str) else p[2]
+                print(f"ID: {p[0]} | Nome: {p[1]} | Preço: R${preco:.2f} | Telas Simultâneas: {p[3]} | Resolução Máxima: {p[4]}")
         else:
-            print("\nNenhum usuário encontrado.")
+            print("\nNenhum plano encontrado.")
     except Exception as e:
-        print(f"Erro ao listar usuários: {e}")
-
+        print(f"Erro ao listar planos: {e}")
 def listar_planos():
     try:
         cur.execute("SELECT idplano, planame, plapreco, telasimult, resolucaomax FROM plano ORDER BY idplano")
